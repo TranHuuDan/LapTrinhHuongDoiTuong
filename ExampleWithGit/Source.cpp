@@ -2,14 +2,17 @@
 #include<iomanip>
 #include<string>
 #include<cstdlib>
+#include<vector>
+
 
 using namespace std;
-int n,dtb;
+int tong;
+float dtb;
 class SinhVien
 {
 private:
 	string name;
-	string mssv;
+	long mssv;
 	float point_cpp;
 	float point_ktb;
 	float point_vlsi;
@@ -17,11 +20,11 @@ private:
 	float dtb;
 
 public:
-	SinhVien(string name=" ", string mssv=" ",float point_cpp=0,float point_ktb=0,float point_vlsi=0,float point_mnc=0);
+	SinhVien(string name=" ", long mssv=0,float point_cpp=0,float point_ktb=0,float point_vlsi=0,float point_mnc=0);
 	void setname(string name);
 	string getname();
-	void setmssv(string mssv);
-	string getmssv();
+	void setmssv(long mssv);
+	long getmssv();
 	void setpoint_cpp(float point_cpp);
 	float getpoint_cpp();
 	void setpoint_ktb(float point_ktb);
@@ -32,9 +35,9 @@ public:
 	float getpoint_mnc();
 	float DTB();
 	void show();
-	void nhap();
+	void Input();
 };
-SinhVien::SinhVien(string nameIn, string mssvIn, float point_cppIn, float point_ktbIn, float point_vlsiIn, float point_mncIn)
+SinhVien::SinhVien(string nameIn, long mssvIn, float point_cppIn, float point_ktbIn, float point_vlsiIn, float point_mncIn)
 {
 	name = nameIn;
 	mssv = mssvIn;
@@ -51,11 +54,11 @@ string SinhVien::getname()
 {
 	return name;
 }
-void SinhVien::setmssv(string mssvIn)
+void SinhVien::setmssv(long mssvIn)
 {
 	mssv = mssvIn;
 }
-string SinhVien::getmssv()
+long SinhVien::getmssv()
 {
 	return mssv;
 }
@@ -94,7 +97,7 @@ float SinhVien::getpoint_mnc()
 float SinhVien::DTB()
 {
 	dtb = (point_cpp + point_ktb + point_vlsi + point_mnc) / 4;
-	return dtb;
+	return dtb ;
 }
 void SinhVien::show()
 {
@@ -106,12 +109,14 @@ void SinhVien::show()
 	cout << "\nDiem mon mang nang cao: " << getpoint_mnc();
 	cout << "\nDiem so trung binh cua sinh vien "<<getname()<<" la : " <<fixed<<setprecision(2)<< DTB();
 }
-void SinhVien::nhap()
+void SinhVien::Input()
 {
+
 	cout << "\nHo va ten sinh vien: ";
+	cin.ignore();
 	getline(cin,name);
 	cout << "\nMa so sinh vien: ";
-	getline(cin, mssv);
+	cin>> mssv;
 	cout << "\nDiem mon c++  : " ;
 	cin >> point_cpp;
 	cout << "\nDiem mon kien truc bus: ";
@@ -122,73 +127,164 @@ void SinhVien::nhap()
 	cin >> point_mnc;
 }
 
+class Menu {
+private:
+	int tong=3;
+	vector <SinhVien> sv;
+public:
+	void NhapDanhSachSv();
+	void XuatDanhSachSv();
+	void SapXepTheoMSSV();
+	void SapXepTheoDTB();
+	void XoaSv();
+	void ThemSv();
+	void TimKiemMSSV();
+	void LietKeSVGioi();
+	void Inmenu();
+};
+void Menu::XoaSv()
+{
+
+}
+void Menu::ThemSv()
+{
+
+}
+void Menu::NhapDanhSachSv()
+{
+	sv.resize(tong);
+	for (int i = 0; i < sv.size(); i++)
+	{
+		sv[i].Input();
+	}
+}
+void Menu::SapXepTheoDTB()
+{
+	sv.resize(tong);
+	for (int i = 0; i < sv.size()-1; i++)
+	{
+		for (int j = i + 1; j < sv.size(); j++)
+		{
+			float d1 = sv[i].DTB();
+			float d2 = sv[j].DTB();
+			if ( d1< d2)
+			{
+				float temp = d1;
+				d1= d2;
+				d2 = temp;
+			}
+		}
+	}
+}
+void Menu::SapXepTheoMSSV()
+{
+	sv.resize(tong);
+	for (int i = 0; i < sv.size() - 1; i++)
+	{
+		for (int j = i + 1; j < sv.size(); j++)
+		{
+			float d1 = sv[i].getmssv();
+			float d2 = sv[j].getmssv();
+			if (d1> d2)
+			{
+				float temp = d1;
+				d1 = d2;
+				d2 = temp;
+			}
+		}
+	}
+}
+void Menu::LietKeSVGioi()
+{
+	for (int i = 0; i < sv.size(); i++)
+	{
+		if (sv[i].DTB() >=8.0)
+		{
+			sv[i].show();
+		}
+	}
+}
+void Menu::TimKiemMSSV()
+{
+	sv.resize(tong);
+	long MaSo;
+	cout << "Nhap MSSV muon tim kiem:";
+	cin >> MaSo;
+	for (int i = 0; i < sv.size(); i++)
+	{
+		if  (sv[i].getmssv()== MaSo)
+		{
+			sv[i].show();
+			break;
+		}
+	}
+	cout << "khong tim thay sinh vien!!!!";
+}
+
+void Menu::XuatDanhSachSv()
+{
+	sv.resize(tong);
+	for (int i = 0; i < sv.size(); i++)
+	{
+		sv[i].show();
+		
+	}
+}
+void Menu::Inmenu()
+{
+	int k;
+	do 
+	{
+		system("cls");
+		cout << "\n		1-Nhap danh sach sinh vien";
+		cout << "\n		2-Xuat danh sach sinh vien";
+		cout << "\n		3-sap xep danh sach sinh vien theo DTB";
+		cout << "\n		4-sap xep danh sach sinh vien theo MSSV";
+		cout << "\n		5-Tim kiem sinh vien theo MSSV";
+		cout << "\n		6-Danh sach SV gioi";
+		cout << "\n		7-Them 1 sinh vien moi";
+		cout << "\n		8-Xoa sinh vien ra khoi danh sach";
+		cout << "\n		9-Thoat";
+		cout << "\nNhap su lua chon muon thuc hien:";
+		cin >> k;
+		switch (k) 
+		{
+		case 1:
+			NhapDanhSachSv();
+			break;
+		case 2:
+			XuatDanhSachSv();
+			system("pause");
+			break;
+		case 3:
+			SapXepTheoDTB();
+			break;
+		case 4:
+			SapXepTheoMSSV();
+			break;
+		case 5:
+			TimKiemMSSV();		
+			system("pause");
+			break;
+		case 6:
+			LietKeSVGioi();
+			system("pause");
+			break;
+		case 7:
+			ThemSv();
+			break;
+		case 8:
+			XoaSv();
+			break;
+
+		}
+	} while (k != 9);
+}
 int main()
 {
-	string name;
-	string mssv;
-	float point_cpp;
-	float point_ktb;
-	float point_vlsi;
-	float point_mnc;
-	float dtb;
-	int n,index=0;
-	//SinhVien sv("Tran Huu Dan","1720040",5,9,7,9);
-	//sv.show();
-	//SinhVien sv1;
-	//sv1.nhap();
-	//sv1.show();
-	cout << "Nhap so luong sinh vien can quan li:";
-	cin >> n;
-	
-	float max = 0;
-	SinhVien *sv2 = new SinhVien[n];
-	for (int i = 0; i < n; i++)
-	  {
-		cin.ignore();
-		string name;
-		string mssv;
-		float point_cpp;
-		float point_ktb;
-		float point_vlsi;
-		float point_mnc;
-		float dtb;
-		cout << "			Thong tin cua sinh vien thu "<<i+1 <<":";
-		cout << "\nHo va ten sinh vien: ";
-		getline(cin, name);
-		sv2[i].setname(name);
-		cout << "\nMa so sinh vien: ";
-		getline(cin, mssv);
-		sv2[i].setmssv(mssv);
-		cout << "\nDiem mon c++  : ";
-		cin >> point_cpp;
-		sv2[i].setpoint_cpp(point_cpp);
-		cout << "\nDiem mon kien truc bus: ";
-		cin >> point_ktb;
-		sv2[i].setpoint_ktb(point_ktb);
-		cout << "\nDiem mon vlsi : ";
-		cin >> point_vlsi;
-		sv2[i].setpoint_vlsi(point_vlsi);
-		cout << "\nDiem mon mang nang cao: ";
-		cin >> point_mnc;
-		sv2[i].setpoint_mnc(point_mnc);
-		dtb = sv2[i].DTB();
-		if (max < dtb)
-		{
-			max = dtb;
-			index = i;
-		}
-		
-	  }
-	cout << "\nSinh vien co diem so trung binh cao nhat :";
-	for (int i = 0; i < n; i++)
-	{
-		if (i == index)
-		{	
-	    	sv2[i].show();
-		    break;
-	    }
-	}
-	delete[] sv2;
-	cout << "\n\n\n\n";
+	int tong;
+	Menu me;
+	me.Inmenu();
+	cout << endl;
 	return 0;
 }
