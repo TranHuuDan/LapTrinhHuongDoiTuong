@@ -20,7 +20,6 @@ private:
 	float dtb;
 
 public:
-	SinhVien(string name=" ", long mssv=0,float point_cpp=0,float point_ktb=0,float point_vlsi=0,float point_mnc=0);
 	void setname(string name);
 	string getname();
 	void setmssv(long mssv);
@@ -37,15 +36,7 @@ public:
 	void show();
 	void Input();
 };
-SinhVien::SinhVien(string nameIn, long mssvIn, float point_cppIn, float point_ktbIn, float point_vlsiIn, float point_mncIn)
-{
-	name = nameIn;
-	mssv = mssvIn;
-	point_cpp = point_cppIn;
-	point_ktb = point_ktbIn;
-	point_vlsi = point_vlsiIn;
-	point_mnc = point_mncIn;
-}
+
 void SinhVien::setname(string nameIn)
 {
 	name = nameIn;
@@ -129,7 +120,7 @@ void SinhVien::Input()
 
 class Menu {
 private:
-	int tong=3;
+	int tong=2;
 	vector <SinhVien> sv;
 public:
 	void NhapDanhSachSv();
@@ -144,11 +135,29 @@ public:
 };
 void Menu::XoaSv()
 {
-
+	long Mso;
+	int index;
+	cout << "Nhap MSSV can xoa:";
+	cin >> Mso;
+	for (int i = 0; i < sv.size(); i++)
+	{
+		if(sv[i].getmssv() == Mso)
+		 {
+			 index = i;
+			
+			break;
+		 }
+	}
+	sv.erase(sv.begin()+index);
 }
 void Menu::ThemSv()
 {
-
+	
+	cout << "Nhap thong tin sinh vien can them:";
+	sv.resize(tong + 1);
+	sv[sv.size()-1].Input();
+	sv.push_back(sv[sv.size()-1]);
+	sv.pop_back();
 }
 void Menu::NhapDanhSachSv()
 {
@@ -223,7 +232,7 @@ void Menu::TimKiemMSSV()
 
 void Menu::XuatDanhSachSv()
 {
-	sv.resize(tong);
+
 	for (int i = 0; i < sv.size(); i++)
 	{
 		sv[i].show();
