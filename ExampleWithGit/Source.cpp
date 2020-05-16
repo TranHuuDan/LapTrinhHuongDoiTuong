@@ -120,7 +120,6 @@ void SinhVien::Input()
 
 class Menu {
 private:
-	int tong=2;
 	vector <SinhVien> sv;
 public:
 	void NhapDanhSachSv();
@@ -152,7 +151,6 @@ void Menu::XoaSv()
 }
 void Menu::ThemSv()
 {
-	
 	cout << "Nhap thong tin sinh vien can them:";
 	sv.resize(tong + 1);
 	sv[sv.size()-1].Input();
@@ -169,45 +167,48 @@ void Menu::NhapDanhSachSv()
 }
 void Menu::SapXepTheoDTB()
 {
-	sv.resize(tong);
+	sv.resize(sv.size());
 	for (int i = 0; i < sv.size()-1; i++)
 	{
 		for (int j = i + 1; j < sv.size(); j++)
 		{
-			float d1 = sv[i].DTB();
-			float d2 = sv[j].DTB();
-			if ( d1< d2)
+			if (sv[i].DTB()<sv[j].DTB())
 			{
-				float temp = d1;
-				d1= d2;
-				d2 = temp;
+				swap(sv[i], sv[j]);
 			}
 		}
 	}
+	for (int i = 0; i < sv.size() ; i++)
+	{
+		sv[i].show();
+	}
+	system("pause");
 }
 void Menu::SapXepTheoMSSV()
 {
-	sv.resize(tong);
+	sv.resize(sv.size());
 	for (int i = 0; i < sv.size() - 1; i++)
 	{
 		for (int j = i + 1; j < sv.size(); j++)
 		{
-			float d1 = sv[i].getmssv();
-			float d2 = sv[j].getmssv();
-			if (d1> d2)
+			if (sv[i].getmssv()<sv[j].getmssv())
 			{
-				float temp = d1;
-				d1 = d2;
-				d2 = temp;
+				swap(sv[i], sv[j]);
 			}
 		}
 	}
+	for (int i = 0; i < sv.size() ; i++)
+	{
+		sv[i].show();
+		
+	}
+	system("pause");
 }
 void Menu::LietKeSVGioi()
 {
 	for (int i = 0; i < sv.size(); i++)
 	{
-		if (sv[i].DTB() >=8.0)
+		if (sv[i].DTB() >= 8.0)
 		{
 			sv[i].show();
 		}
@@ -215,7 +216,7 @@ void Menu::LietKeSVGioi()
 }
 void Menu::TimKiemMSSV()
 {
-	sv.resize(tong);
+	sv.resize(sv.size());
 	long MaSo;
 	cout << "Nhap MSSV muon tim kiem:";
 	cin >> MaSo;
@@ -226,13 +227,15 @@ void Menu::TimKiemMSSV()
 			sv[i].show();
 			break;
 		}
+		if (sv[i].getmssv() != MaSo && i == (sv.size()-1))
+		{
+			cout << "\nkhong tim thay sinh vien!!!!";
+		}
 	}
-	cout << "khong tim thay sinh vien!!!!";
 }
-
 void Menu::XuatDanhSachSv()
 {
-
+	sv.resize(sv.size());
 	for (int i = 0; i < sv.size(); i++)
 	{
 		sv[i].show();
@@ -285,13 +288,13 @@ void Menu::Inmenu()
 		case 8:
 			XoaSv();
 			break;
-
 		}
 	} while (k != 9);
 }
 int main()
 {
-	int tong;
+	cout << "Nhap so luong sinh vien:";
+	cin >> tong;
 	Menu me;
 	me.Inmenu();
 	cout << endl;
