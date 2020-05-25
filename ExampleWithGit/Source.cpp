@@ -3,6 +3,7 @@
 #include<string>
 #include<cstdlib>
 #include<vector>
+#include<fstream>
 
 
 using namespace std;
@@ -35,6 +36,8 @@ public:
 	float DTB();
 	void show();
 	void Input();
+	void DocFile(ifstream &file);
+	void XuatFile(ofstream &file);
 };
 
 void SinhVien::setname(string nameIn)
@@ -118,6 +121,26 @@ void SinhVien::Input()
 	cin >> point_mnc;
 }
 
+void SinhVien::DocFile(ifstream &file)
+{
+	file.ignore();
+	getline(file,name);
+	file >> mssv;
+	file >> point_cpp;
+	file >> point_ktb;
+	file >> point_vlsi;
+	file >> point_mnc;
+}
+void SinhVien::XuatFile(ofstream &file)
+{
+	
+	file << name << "\n";
+	file << mssv << "\n";
+	file << point_cpp <<"\n";
+	file << point_ktb << "\n";
+	file << point_vlsi << "\n";
+	file << point_mnc << "\n";
+}
 class Menu {
 private:
 	vector <SinhVien> sv;
@@ -131,6 +154,8 @@ public:
 	void TimKiemMSSV();
 	void LietKeSVGioi();
 	void Inmenu();
+	void DOCFILE();
+	void XUATFILE();
 };
 void Menu::XoaSv()
 {
@@ -159,6 +184,8 @@ void Menu::ThemSv()
 }
 void Menu::NhapDanhSachSv()
 {
+	cout << "Nhap so luong sinh vien:";
+	cin >> tong;
 	sv.resize(tong);
 	for (int i = 0; i < sv.size(); i++)
 	{
@@ -242,12 +269,48 @@ void Menu::XuatDanhSachSv()
 		
 	}
 }
+
+void Menu::XUATFILE()
+{
+	ofstream file;
+	file.open("E:\\C++\\HDT_Git\\dssinhvien.txt");
+	if (file.is_open())
+	{
+		file << sv.size() << "\n";
+		for (int i = 0; i < sv.size(); i++)
+		{
+			sv[i].XuatFile(file);
+		}
+		file.close();
+	}
+	else
+		cout << "Khong mo duoc file dssinhvien.txt";
+}
+void Menu::DOCFILE()
+{
+	ifstream file;
+	int n;
+	file.open("E:\\C++\\HDT_Git\\dssinhvien.txt");
+	if (file.is_open())
+	{
+		file >> n;
+	    sv.resize(n);
+		for (int i = 0; i < sv.size(); i++)
+		{
+			sv[i].DocFile(file);
+		}
+		file.close();
+	}
+	else
+		cout << "Khong mo duoc file dssinhvien.txt";
+}
 void Menu::Inmenu()
 {
 	int k;
 	do 
 	{
 		system("cls");
+		cout << "\n		0-Thoat";
 		cout << "\n		1-Nhap danh sach sinh vien";
 		cout << "\n		2-Xuat danh sach sinh vien";
 		cout << "\n		3-sap xep danh sach sinh vien theo DTB";
@@ -256,7 +319,9 @@ void Menu::Inmenu()
 		cout << "\n		6-Danh sach SV gioi";
 		cout << "\n		7-Them 1 sinh vien moi";
 		cout << "\n		8-Xoa sinh vien ra khoi danh sach";
-		cout << "\n		9-Thoat";
+		cout << "\n		9-Xuat sinh vien ra FILE";
+		cout << "\n		10-Doc sinh vien tu FILE";
+		cout << "\n";
 		cout << "\nNhap su lua chon muon thuc hien:";
 		cin >> k;
 		switch (k) 
@@ -288,15 +353,19 @@ void Menu::Inmenu()
 		case 8:
 			XoaSv();
 			break;
+		case 9:
+			XUATFILE();
+			break;
+		case 10:
+			DOCFILE();
+			break;
 		}
-	} while (k != 9);
+	} while (k != 0);
 }
 int main()
 {
-	cout << "Nhap so luong sinh vien:";
-	cin >> tong;
 	Menu me;
 	me.Inmenu();
-	cout << endl;
+	cout <<"\n \n";
 	return 0;
 }
